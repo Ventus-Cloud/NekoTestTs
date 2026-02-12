@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nekovilo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#1a1b1e] text-white font-sans min-h-screen">
+    <nav class="bg-[#121214] p-4 border-b border-gray-800">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black text-[#5865F2] tracking-tighter">NEKOVILO</h1>
+            <div class="flex items-center gap-3">
+                <% if (user_id === admin_id) { %>
+                <a href="/admin" class="bg-red-600/20 text-red-500 border border-red-600/50 px-4 py-2 rounded-lg text-xs font-bold uppercase">Admin Panel</a>
+                <% } %>
+                <a href="/logout" class="text-gray-400 hover:text-white text-sm">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-10 px-4">
+        <h2 class="text-3xl font-bold mb-6">Tus Servidores</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <% guilds.forEach(function(guild) { %>
+            <div class="bg-[#25262b] p-6 rounded-2xl border border-gray-800 hover:border-[#5865F2] transition shadow-xl">
+                <div class="flex items-center gap-4 mb-6">
+                    <% if (guild.icon_url) { %>
+                        <img src="<%= guild.icon_url %>" class="w-16 h-16 rounded-2xl">
+                    <% } else { %>
+                        <div class="w-16 h-16 rounded-2xl bg-[#5865F2] flex items-center justify-center font-bold"><%= guild.name[0] %></div>
+                    <% } %>
+                    <h3 class="font-bold text-lg truncate"><%= guild.name %></h3>
+                </div>
+                <a href="/dashboard/<%= guild.id %>" class="block w-full text-center bg-[#5865F2] py-3 rounded-xl font-bold hover:bg-[#4752c4] transition">Gestionar</a>
+            </div>
+            <% }); %>
+        </div>
+    </main>
+</body>
+</html>

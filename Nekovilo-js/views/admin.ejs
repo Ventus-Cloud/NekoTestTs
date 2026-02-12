@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Nekovilo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-[#0f0f12] text-white p-8">
+    <div class="max-w-6xl mx-auto">
+        <header class="flex justify-between items-end mb-10">
+            <div>
+                <h1 class="text-5xl font-black text-red-600 uppercase">System Admin</h1>
+                <p class="text-gray-500">Sesión como <%= user.username %></p>
+            </div>
+            <a href="/dashboard" class="bg-white text-black px-6 py-2 rounded-full font-bold">Volver</a>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <div class="bg-blue-600/10 border border-blue-600/30 p-8 rounded-3xl">
+                <p class="text-blue-500 text-xs font-bold uppercase mb-2">Respuestas enviadas</p>
+                <p class="text-6xl font-black"><%= total_stats %></p>
+            </div>
+            <div class="bg-purple-600/10 border border-purple-600/30 p-8 rounded-3xl">
+                <p class="text-purple-500 text-xs font-bold uppercase mb-2">Servidores</p>
+                <p class="text-6xl font-black"><%= total_guilds %></p>
+            </div>
+        </div>
+
+        <div class="grid gap-4">
+            <% guilds.forEach(function(guild) { %>
+            <div class="bg-[#1a1a1f] p-5 rounded-2xl border border-gray-800 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <% if (guild.icon) { %> <img src="<%= guild.icon %>" class="w-14 h-14 rounded-xl"> <% } %>
+                    <div>
+                        <h3 class="font-bold text-lg"><%= guild.name %></h3>
+                        <p class="text-xs text-gray-500">👥 <%= guild.members %> | ⚡ <%= guild.triggers_count %> triggers</p>
+                    </div>
+                </div>
+                <a href="/admin/wipe/<%= guild.id %>" onclick="return confirm('¿WIPE?')" class="text-orange-500 hover:text-white"><i class="fas fa-eraser"></i></a>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
+</html>

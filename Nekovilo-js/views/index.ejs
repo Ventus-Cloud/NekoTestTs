@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nekovilo Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-[#2c2f33] text-white font-sans flex items-center justify-center min-h-screen">
+    <div class="text-center p-8 bg-[#23272a] rounded-2xl shadow-2xl border border-gray-700 max-w-md w-full">
+        <h1 class="text-4xl font-extrabold mb-4 text-[#5865F2]">Nekovilo</h1>
+        <p class="text-gray-400 mb-8">Gestiona tus triggers y respuestas automáticas de forma sencilla desde la web.</p>
+        
+        <% if (authorized) { %>
+            <a href="/dashboard" class="block w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                Ir al Panel de Control
+            </a>
+            <a href="/logout" class="block mt-4 text-sm text-gray-500 hover:text-red-400 underline">Cerrar Sesión</a>
+        <% } else { %>
+            <a href="/login" class="flex items-center justify-center w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform active:scale-95">
+                <i class="fab fa-discord text-2xl mr-3"></i>
+                Login con Discord
+            </a>
+        <% } %>
+    </div>
+</body>
+</html>

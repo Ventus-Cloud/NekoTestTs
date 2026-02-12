@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Nekovilo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f0f12; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #5865F2; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#0f0f12] text-white min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold">Configurando: <span class="text-[#5865F2]"><%= guild_name %></span></h1>
+                <p class="text-xs text-gray-500">Gestiona los disparadores automáticos</p>
+            </div>
+            <a href="/dashboard" class="bg-gray-800 px-4 py-2 rounded-xl text-sm hover:bg-gray-700 transition flex items-center gap-2">
+                <i class="fas fa-arrow-left"></i> <span class="hidden md:inline">Volver</span>
+            </a>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4 bg-[#1a1a1f] p-6 rounded-2xl border border-gray-800 h-fit lg:sticky lg:top-8 shadow-xl">
+                <h2 class="text-lg font-bold mb-6 text-[#5865F2] flex items-center gap-2">
+                    <i class="fas fa-plus-circle"></i> Nuevo Trigger
+                </h2>
+                <form action="/dashboard/<%= guild_id %>/add" method="POST" class="space-y-5">
+                    <div>
+                        <label class="text-[10px] text-gray-400 uppercase font-black tracking-widest">Palabra Clave</label>
+                        <input type="text" name="keyword" placeholder="Ej: fact" required class="w-full bg-black border border-gray-800 p-3 rounded-xl focus:border-[#5865F2] outline-none mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 uppercase font-black tracking-widest">Ignorar si contiene</label>
+                        <input type="text" name="exceptions" placeholder="Ej: factory" class="w-full bg-black border border-gray-800 p-3 rounded-xl outline-none mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 uppercase font-black tracking-widest">Canales</label>
+                        <select name="channel_ids" multiple required class="w-full bg-black border border-gray-800 p-3 rounded-xl mt-1 h-48 custom-scrollbar">
+                            <% channels.forEach(function(channel) { %>
+                            <option value="<%= channel.id %>" class="p-2 hover:bg-gray-800 rounded"># <%= channel.name %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-gray-400 uppercase font-black tracking-widest">Respuesta</label>
+                        <textarea name="response" placeholder="Respuesta..." required class="w-full bg-black border border-gray-800 p-3 rounded-xl h-28 outline-none mt-1 resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-[#5865F2] py-4 rounded-xl font-bold hover:bg-[#4752c4] transition shadow-lg">
+                        <i class="fas fa-save mr-2"></i> Crear Regla
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-8">
+                <div class="bg-[#1a1a1f] rounded-2xl border border-gray-800 shadow-xl overflow-hidden">
+                    <div class="p-4 border-b border-gray-800 bg-black/20">
+                        <h2 class="font-bold text-gray-300"><i class="fas fa-list-ul text-[#5865F2]"></i> Triggers Activos</h2>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse min-w-[700px]">
+                            <thead class="bg-black/40 text-gray-500 text-[10px] uppercase border-b border-gray-800">
+                                <tr>
+                                    <th class="p-4">Disparador</th>
+                                    <th class="p-4">Canales</th>
+                                    <th class="p-4">Respuesta</th>
+                                    <th class="p-4">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/50">
+                                <% if (triggers.length > 0) { %>
+                                    <% triggers.forEach(function(trigger) { %>
+                                    <tr class="hover:bg-white/[0.02] transition">
+                                        <td class="p-4 align-top">
+                                            <div class="text-[#5865F2] font-bold">"<%= trigger.keywords[0] %>"</div>
+                                        </td>
+                                        <td class="p-4 align-top w-48">
+                                            <div class="flex flex-wrap gap-1">
+                                                <% if (trigger.channel_ids) { %>
+                                                    <% trigger.channel_ids.forEach(function(cid) { %>
+                                                        <span class="bg-gray-800 text-gray-300 text-[10px] px-2 py-1 rounded border border-gray-700"># <%= channel_map[cid] || '...' %></span>
+                                                    <% }); %>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 align-top text-sm text-gray-300 max-w-[200px] break-words">
+                                            <%= trigger.response %>
+                                        </td>
+                                        <td class="p-4 align-top text-right">
+                                            <a href="/dashboard/<%= guild_id %>/delete/<%= trigger.id %>" onclick="return confirm('¿Borrar?')" class="bg-red-500/10 text-red-500 p-2 rounded hover:bg-red-500 hover:text-white transition"><i class="fas fa-trash-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr><td colspan="4" class="p-10 text-center text-gray-500">No hay triggers.</td></tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "rootDir": "src",            // <--- Asegúrate que diga SOLO "src"
+    "outDir": "dist",            // <--- Donde se guardará el código compilado
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],       // <--- Esto le dice que compile todo lo que esté en src
+  "exclude": ["node_modules"]
+}
